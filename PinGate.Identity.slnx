@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PinGate.Identity.Api/PinGate.Identity.Api.csproj" />
+    <Project Path="src/PinGate.Identity.Application/PinGate.Identity.Application.csproj" />
+    <Project Path="src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj" />
+    <Project Path="src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj" />
+  </Folder>
+</Solution>

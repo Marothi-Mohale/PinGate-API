@@ -1,0 +1,1709 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 8 /Kids [ 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R 20 0 R ] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 3736 >>
+stream
+BT
+/F2 18 Tf
+1 0 0 1 54 756 Tm
+(PinGate Identity Setup Guide) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 720 Tm
+(Senior mentoring notes for the foundation phase of the project.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 699 Tm
+(This document captures what we built, why we built it that way, and the senior-level) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 686 Tm
+(thinking behind each choice. The goal is not only to remember the commands, but to) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 673 Tm
+(remember the engineering intent behind them.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 652 Tm
+(1. The posture we took from the start) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 624 Tm
+(- We did not jump straight into controllers or database tables.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 611 Tm
+(- We first verified the environment, then created the architecture skeleton, then) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 598 Tm
+(  wired dependencies, then validated the build.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 585 Tm
+(- This is a senior habit: verify the toolchain, create clear boundaries, then) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 572 Tm
+(  build on a stable foundation.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 559 Tm
+(- We treated the codebase as a system, not just a collection of files.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 538 Tm
+(2. Environment verification) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 510 Tm
+(Command: check the .NET SDK) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 487 Tm
+(dotnet --version) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 467 Tm
+(- What it does: prints the installed .NET SDK version.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 454 Tm
+(- Why we ran it: to confirm the machine was ready before creating anything.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 441 Tm
+(- What we learned: the machine had .NET SDK 10.0.201 installed.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 428 Tm
+(- Senior lesson: never assume the environment is correct. Verify first.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 407 Tm
+(3. Create the solution container) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 379 Tm
+(Command: create the solution) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 356 Tm
+(dotnet new sln -n PinGate.Identity) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 336 Tm
+(- What it does: creates the top-level solution container for the system.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 323 Tm
+(- What appeared on disk: PinGate.Identity.slnx.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 310 Tm
+(- Why we did it: this project is bigger than one executable; it needs multiple) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 297 Tm
+(  projects grouped together.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 284 Tm
+(- Senior lesson: the solution is the blueprint for the whole building.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 263 Tm
+(4. Create the Domain project) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 235 Tm
+(Command: create the business core) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 212 Tm
+(dotnet new classlib -n PinGate.Identity.Domain -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 200 Tm
+(src/PinGate.Identity.Domain) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 180 Tm
+(- What it does: creates a class library for the domain layer.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 167 Tm
+(- Why this layer exists: it holds business concepts and business rules.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 154 Tm
+(- What will live here later: CustomerIdentity, OtpChallenge, SessionToken,) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 141 Tm
+(  TrustedDevice, LoginAttempt, FraudFlag.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 128 Tm
+(- What should not live here: controllers, HTTP code, Redis, database code, EF Core) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 115 Tm
+(  mappings.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 102 Tm
+(- Senior lesson: Domain is the business truth and should be the most independent) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 89 Tm
+(  layer.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 68 Tm
+(File inspection: Domain project file) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 1 of 8) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 4108 >>
+stream
+BT
+/F3 9.5 Tf
+1 0 0 1 72 756 Tm
+(src\\PinGate.Identity.Domain\\PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 736 Tm
+(- Project Sdk="Microsoft.NET.Sdk": standard SDK for a class library.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 723 Tm
+(- TargetFramework net10.0: the project targets .NET 10.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 710 Tm
+(- ImplicitUsings enable: common namespaces are auto-included.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 697 Tm
+(- Nullable enable: nullable reference type checks are on.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 684 Tm
+(- Senior lesson: strong developers inspect generated files instead of treating) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 671 Tm
+(  templates as magic.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 650 Tm
+(5. Create the Application project) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 622 Tm
+(Command: create the use-case layer) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 599 Tm
+(dotnet new classlib -n PinGate.Identity.Application -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 587 Tm
+(src/PinGate.Identity.Application) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 567 Tm
+(- What it does: creates a class library for business workflows and use cases.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 554 Tm
+(- Why this layer exists: it coordinates actions such as request OTP, verify OTP,) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 541 Tm
+(  refresh session, logout, list sessions, and get login history.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 528 Tm
+(- What belongs here: commands, queries, DTOs, interfaces, orchestration logic.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 515 Tm
+(- What should not belong here: controllers or direct infrastructure details.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 502 Tm
+(- Senior lesson: Application is where the business acts.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 481 Tm
+(File inspection: Application project file) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 458 Tm
+(src\\PinGate.Identity.Application\\PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 438 Tm
+(- It had the same baseline settings as Domain.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 425 Tm
+(- That taught us an important lesson: projects can share the same technical) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 412 Tm
+(  template while serving very different architectural roles.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 391 Tm
+(6. Create the Infrastructure project) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 363 Tm
+(Command: create the technical implementation layer) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 340 Tm
+(dotnet new classlib -n PinGate.Identity.Infrastructure -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 328 Tm
+(src/PinGate.Identity.Infrastructure) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 308 Tm
+(- What it does: creates a class library for technology-facing implementations.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 295 Tm
+(- Why this layer exists: it will hold persistence, Redis integration, token) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 282 Tm
+(  generation, logging, and background services.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 269 Tm
+(- What will live here later: DbContext, repository implementations, Redis OTP) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 256 Tm
+(  storage, audit log plumbing, session persistence, hosted cleanup services.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 243 Tm
+(- Senior lesson: Infrastructure is where the system talks to external technology.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 222 Tm
+(File inspection: Infrastructure project file) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 199 Tm
+(src\\PinGate.Identity.Infrastructure\\PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 179 Tm
+(- It also used Microsoft.NET.Sdk with net10.0, implicit usings, and nullable) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 166 Tm
+(  checks.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 153 Tm
+(- Senior lesson: architecture is about responsibility, not just about project) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 140 Tm
+(  templates.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 119 Tm
+(7. Create the API project) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 91 Tm
+(Command: create the HTTP host) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 68 Tm
+(dotnet new webapi -n PinGate.Identity.Api -o src/PinGate.Identity.Api) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 56 Tm
+(--use-controllers) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 2 of 8) Tj
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 4267 >>
+stream
+BT
+/F1 10.5 Tf
+1 0 0 1 54 756 Tm
+(- What it does: creates an ASP.NET Core Web API project using controllers.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 743 Tm
+(- Why we used controllers: they make routing and request handling explicit, which) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 730 Tm
+(  is excellent for learning and common in enterprise codebases.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 717 Tm
+(- Why this layer exists: it exposes the HTTP endpoints for the identity and OTP) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 704 Tm
+(  service.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 691 Tm
+(- Senior lesson: the API is the front door, not the brain.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 670 Tm
+(File inspection: API project file) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 647 Tm
+(src\\PinGate.Identity.Api\\PinGate.Identity.Api.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 627 Tm
+(- Project Sdk="Microsoft.NET.Sdk.Web": this is a web host, not a simple class) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 614 Tm
+(  library.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 601 Tm
+(- PackageReference Microsoft.AspNetCore.OpenApi: enables OpenAPI support for) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 588 Tm
+(  documentation and discovery.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 575 Tm
+(- Senior lesson: web projects have different runtime responsibilities than class) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 562 Tm
+(  libraries.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 541 Tm
+(File inspection: Program.cs) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 518 Tm
+(src\\PinGate.Identity.Api\\Program.cs) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 498 Tm
+(- WebApplication.CreateBuilder\(args\): starts building the application host.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 485 Tm
+(- AddControllers\(\): enables controller support.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 472 Tm
+(- AddOpenApi\(\): registers OpenAPI services.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 459 Tm
+(- Build\(\): creates the web app.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 446 Tm
+(- MapOpenApi\(\) in development: exposes OpenAPI only in development.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 433 Tm
+(- UseHttpsRedirection\(\): encourages secure transport.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 420 Tm
+(- UseAuthorization\(\): adds authorization middleware into the request pipeline.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 407 Tm
+(- MapControllers\(\): exposes controller routes.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 394 Tm
+(- Run\(\): starts the app.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 381 Tm
+(- Senior lesson: Program.cs is the assembly point of the application.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 360 Tm
+(File inspection: WeatherForecastController) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 337 Tm
+(src\\PinGate.Identity.Api\\Controllers\\WeatherForecastController.cs) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 317 Tm
+(- ApiController attribute: turns the class into an API controller with) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 304 Tm
+(  API-specific behavior.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 291 Tm
+(- Route\("[controller]"\): maps the route based on the controller name.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 278 Tm
+(- HttpGet attribute: marks the action as a GET endpoint.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 265 Tm
+(- ControllerBase: the correct base class for APIs without views.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 252 Tm
+(- Senior lesson: the sample controller is only a placeholder. Real business logic) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 239 Tm
+(  must not stay inside toy controllers.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 218 Tm
+(8. Create the test project) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 190 Tm
+(Command: create the test safety net) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 167 Tm
+(dotnet new xunit -n PinGate.Identity.Tests -o tests/PinGate.Identity.Tests) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 147 Tm
+(- What it does: creates an xUnit test project.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 134 Tm
+(- Why we created it early: testing should shape design from the beginning,) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 121 Tm
+(  especially in a security-sensitive service.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 108 Tm
+(- Senior lesson: tests are not a phase at the end; they are part of the) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 95 Tm
+(  architecture.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 74 Tm
+(File inspection: test project file) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 51 Tm
+(tests\\PinGate.Identity.Tests\\PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 3 of 8) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 4284 >>
+stream
+BT
+/F1 10.5 Tf
+1 0 0 1 54 756 Tm
+(- Microsoft.NET.Test.Sdk: core test execution support.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 743 Tm
+(- xunit: the test framework.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 730 Tm
+(- xunit.runner.visualstudio: test runner integration.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 717 Tm
+(- coverlet.collector: code coverage collection.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 704 Tm
+(- IsPackable false: the project is for verification, not packaging.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 691 Tm
+(- Senior lesson: test projects have a different purpose and therefore a different) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 678 Tm
+(  dependency profile.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 657 Tm
+(9. Add projects to the solution) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 629 Tm
+(Commands: enroll each project into the system) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 606 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 594 Tm
+(src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 582 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 570 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 558 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 546 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 534 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 522 Tm
+(src/PinGate.Identity.Api/PinGate.Identity.Api.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 510 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 498 Tm
+(tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 478 Tm
+(- What these commands do: register each project inside the solution.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 465 Tm
+(- Why this matters: a project can exist physically on disk but still not be part) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 452 Tm
+(  of the overall solution structure.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 439 Tm
+(- What changed: the solution now knew about all five projects and could manage) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 426 Tm
+(  them together.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 413 Tm
+(- Senior lesson: creating a project builds a room; adding it to the solution adds) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 400 Tm
+(  that room to the building blueprint.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 379 Tm
+(10. Add project references) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 351 Tm
+(Project references enforce dependency direction. This is where architecture stops being) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 338 Tm
+(only a diagram and starts being enforced by the compiler.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 317 Tm
+(Command: Application depends on Domain) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 294 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 282 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 270 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 250 Tm
+(- Why it is correct: use cases need the business concepts and rules from the) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 237 Tm
+(  domain.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 224 Tm
+(- Senior lesson: Application stands on Domain.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 203 Tm
+(Command: Infrastructure depends on Application) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 180 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 168 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 156 Tm
+(reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 144 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 124 Tm
+(- Why it is correct: Infrastructure will implement contracts defined by) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 111 Tm
+(  Application.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 98 Tm
+(- Example later: Application may define IOtpStore, Infrastructure may implement) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 85 Tm
+(  RedisOtpStore.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 72 Tm
+(- Senior lesson: outer layers implement what inner layers require.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 51 Tm
+(Command: Infrastructure depends on Domain) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 4 of 8) Tj
+ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 15 0 R >>
+endobj
+15 0 obj
+<< /Length 4009 >>
+stream
+BT
+/F3 9.5 Tf
+1 0 0 1 72 756 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 744 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 732 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 712 Tm
+(- Why it is correct: persistence and technical implementations may need domain) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 699 Tm
+(  entities and value objects.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 686 Tm
+(- Senior lesson: Infrastructure supports the business model without owning it.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 665 Tm
+(Command: API depends on Application) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 642 Tm
+(dotnet add src/PinGate.Identity.Api/PinGate.Identity.Api.csproj reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 630 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 610 Tm
+(- Why it is correct: controllers should call use cases, not contain the real) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 597 Tm
+(  business workflow logic.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 584 Tm
+(- Senior lesson: thin controllers, strong application layer.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 563 Tm
+(Command: API depends on Infrastructure) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 540 Tm
+(dotnet add src/PinGate.Identity.Api/PinGate.Identity.Api.csproj reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 528 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 508 Tm
+(- Why it is correct: the API acts as the composition root and wires concrete) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 495 Tm
+(  implementations during startup.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 482 Tm
+(- Senior lesson: the API assembles the runtime but should not absorb the technical) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 469 Tm
+(  logic itself.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 448 Tm
+(Command: Tests depend on Application) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 425 Tm
+(dotnet add tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 413 Tm
+(reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 401 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 381 Tm
+(- Why it is correct: many of the best tests target business workflows directly) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 368 Tm
+(  without going through HTTP.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 355 Tm
+(- Senior lesson: test use cases at the application layer for speed and clarity.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 334 Tm
+(Command: Tests depend on Domain) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 311 Tm
+(dotnet add tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 299 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 279 Tm
+(- Why it is correct: domain rules deserve direct, focused tests.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 266 Tm
+(- Senior lesson: test pure rules close to the core.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 245 Tm
+(11. Build the full solution) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 217 Tm
+(Command: validate the foundation) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 194 Tm
+(dotnet build PinGate.Identity.slnx) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 174 Tm
+(- What it does: restores dependencies and compiles the whole solution.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 161 Tm
+(- Result we observed: all projects built successfully.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 148 Tm
+(- Why we do this before building features: it confirms the architecture skeleton) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 135 Tm
+(  is healthy before more complexity is added.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 122 Tm
+(- Senior lesson: validate the foundation before building the house higher.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 101 Tm
+(12. The architecture you created) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 73 Tm
+(The dependency map after wiring was:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 52 Tm
+(- Application -> Domain) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 5 of 8) Tj
+ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 17 0 R >>
+endobj
+17 0 obj
+<< /Length 3229 >>
+stream
+BT
+/F1 10.5 Tf
+1 0 0 1 54 756 Tm
+(- Infrastructure -> Application) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 743 Tm
+(- Infrastructure -> Domain) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 730 Tm
+(- Api -> Application) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 717 Tm
+(- Api -> Infrastructure) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 704 Tm
+(- Tests -> Application) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 691 Tm
+(- Tests -> Domain) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 670 Tm
+(This means:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 649 Tm
+(- Domain is the core truth.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 636 Tm
+(- Application orchestrates the use cases.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 623 Tm
+(- Infrastructure provides technical implementations.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 610 Tm
+(- Api exposes the system over HTTP and assembles the runtime.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 597 Tm
+(- Tests verify the rules and flows.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 576 Tm
+(13. The mental model to remember) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 548 Tm
+(Use these five words:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 527 Tm
+(- Domain = truth) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 514 Tm
+(- Application = flow) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 501 Tm
+(- Infrastructure = implementation) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 488 Tm
+(- Api = entry) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 475 Tm
+(- Tests = trust) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 454 Tm
+(Or remember this sentence:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 433 Tm
+(Core rules stay inside. Technical details stay outside.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 412 Tm
+(14. The anti-patterns we deliberately avoided) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 384 Tm
+(- Putting business logic in controllers.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 371 Tm
+(- Letting controllers talk straight to the database.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 358 Tm
+(- Mixing Redis logic into endpoint classes.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 345 Tm
+(- Treating testing as something to do at the end.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 332 Tm
+(- Letting the core business layer depend on outer technical layers.) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 311 Tm
+(Senior lesson: good architecture is mostly about controlling who is allowed to know) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 298 Tm
+(about whom.) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 277 Tm
+(15. What you should be able to explain now) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 249 Tm
+(By the end of this foundation phase, you should be able to explain:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 228 Tm
+(- why we created a solution before building features) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 215 Tm
+(- why Domain and Application are separate) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 202 Tm
+(- why Infrastructure is isolated) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 189 Tm
+(- why the API is the composition root) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 176 Tm
+(- why tests were created before business code) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 163 Tm
+(- why dependency direction matters) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 150 Tm
+(- why a clean build is a milestone) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 129 Tm
+(16. Full command summary) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 101 Tm
+(Environment) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 78 Tm
+(dotnet --version) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 58 Tm
+(Solution) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 6 of 8) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 19 0 R >>
+endobj
+19 0 obj
+<< /Length 4419 >>
+stream
+BT
+/F3 9.5 Tf
+1 0 0 1 72 756 Tm
+(dotnet new sln -n PinGate.Identity) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 736 Tm
+(Projects) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 713 Tm
+(dotnet new classlib -n PinGate.Identity.Domain -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 701 Tm
+(src/PinGate.Identity.Domain) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 689 Tm
+(dotnet new classlib -n PinGate.Identity.Application -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 677 Tm
+(src/PinGate.Identity.Application) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 665 Tm
+(dotnet new classlib -n PinGate.Identity.Infrastructure -o) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 653 Tm
+(src/PinGate.Identity.Infrastructure) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 641 Tm
+(dotnet new webapi -n PinGate.Identity.Api -o src/PinGate.Identity.Api) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 629 Tm
+(--use-controllers) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 617 Tm
+(dotnet new xunit -n PinGate.Identity.Tests -o tests/PinGate.Identity.Tests) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 597 Tm
+(Add projects to the solution) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 574 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 562 Tm
+(src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 550 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 538 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 526 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 514 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 502 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 490 Tm
+(src/PinGate.Identity.Api/PinGate.Identity.Api.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 478 Tm
+(dotnet sln PinGate.Identity.slnx add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 466 Tm
+(tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 446 Tm
+(Add project references) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 423 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 411 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 399 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 387 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 375 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 363 Tm
+(reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 351 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 339 Tm
+(dotnet add) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 327 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 315 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 303 Tm
+(dotnet add src/PinGate.Identity.Api/PinGate.Identity.Api.csproj reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 291 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 279 Tm
+(dotnet add src/PinGate.Identity.Api/PinGate.Identity.Api.csproj reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 267 Tm
+(src/PinGate.Identity.Infrastructure/PinGate.Identity.Infrastructure.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 255 Tm
+(dotnet add tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 243 Tm
+(reference) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 231 Tm
+(src/PinGate.Identity.Application/PinGate.Identity.Application.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 219 Tm
+(dotnet add tests/PinGate.Identity.Tests/PinGate.Identity.Tests.csproj) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 207 Tm
+(reference src/PinGate.Identity.Domain/PinGate.Identity.Domain.csproj) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 187 Tm
+(Validate the foundation) Tj
+ET
+BT
+/F3 9.5 Tf
+1 0 0 1 72 164 Tm
+(dotnet build PinGate.Identity.slnx) Tj
+ET
+BT
+/F2 14 Tf
+1 0 0 1 54 144 Tm
+(17. Final encouragement) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 116 Tm
+(This phase may feel simple because it was mostly setup, but it was not trivial. You) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 103 Tm
+(practiced professional habits that many developers skip:) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 82 Tm
+(- verifying tools) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 69 Tm
+(- reading generated files) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 56 Tm
+(- separating responsibilities early) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 7 of 8) Tj
+ET
+endstream
+endobj
+20 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 21 0 R >>
+endobj
+21 0 obj
+<< /Length 411 >>
+stream
+BT
+/F1 10.5 Tf
+1 0 0 1 54 756 Tm
+(- enforcing architecture with project references) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 743 Tm
+(- validating the full build before feature work) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 722 Tm
+(That is how dependable engineers work. The code is still small, but the thinking is) Tj
+ET
+BT
+/F1 10.5 Tf
+1 0 0 1 54 709 Tm
+(already senior.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 280 28 Tm
+(Page 8 of 8) Tj
+ET
+endstream
+endobj
+xref
+0 22
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000165 00000 n 
+0000000235 00000 n 
+0000000310 00000 n 
+0000000378 00000 n 
+0000000524 00000 n 
+0000004311 00000 n 
+0000004457 00000 n 
+0000008616 00000 n 
+0000008764 00000 n 
+0000013083 00000 n 
+0000013231 00000 n 
+0000017567 00000 n 
+0000017715 00000 n 
+0000021776 00000 n 
+0000021924 00000 n 
+0000025205 00000 n 
+0000025353 00000 n 
+0000029824 00000 n 
+0000029972 00000 n 
+trailer
+<< /Size 22 /Root 1 0 R >>
+startxref
+30434
+%%EOF
