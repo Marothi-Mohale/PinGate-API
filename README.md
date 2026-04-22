@@ -345,11 +345,5 @@ https://github.com/Marothi-Mohale
 
 ---
 
-## Interview Positioning
 
-PinGate demonstrates:
-
-- Understanding of authentication and identity systems
-- Experience designing secure, scalable backend services
-- Awareness of fraud detection and audit requirements
 - Ability to apply Clean Architecture in real-world scenarios
